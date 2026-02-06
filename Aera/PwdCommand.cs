@@ -19,7 +19,7 @@ namespace Aera
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
         {
-            tool.WriteLineColor("pwd: cannot be used in a pipe", "Red");
+            tool.WriteLineColored("pwd: cannot be used in a pipe", "Red");
         }
     }
 }

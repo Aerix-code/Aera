@@ -17,12 +17,12 @@ namespace Aera
 
         public void Execute(string[] args, ShellContext tool)
         {
-            tool.WriteLineColor("THIS IS AN EXAMPLE COMMAND", "yellow"); // this is where you put the code of your command
+            tool.WriteLineColored("THIS IS AN EXAMPLE COMMAND", "yellow"); // this is where you put the code of your command
         }
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
         {
-            tool.WriteLineColor("example: cannot be used in a pipe", "Red"); // error message for when you try to use a non pipeable command with a pipe
+            tool.WriteLineColored("example: cannot be used in a pipe", "Red"); // error message for when you try to use a non pipeable command with a pipe
         }
     }
 }

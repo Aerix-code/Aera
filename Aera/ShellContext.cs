@@ -31,7 +31,7 @@ namespace Aera
                 Console.Write(t);
         }
 
-        public void WriteColor(string t, string c)
+        public void WriteColored(string t, string c)
         {
             if (CaptureMode)
             {
@@ -46,7 +46,7 @@ namespace Aera
             Console.ResetColor();
         }
 
-        public void WriteLineColor(string t, string c)
+        public void WriteLineColored(string t, string c)
         {
             if (CaptureMode)
             {
@@ -68,7 +68,7 @@ namespace Aera
             return result;
         }
 
-        public string GetInput() => Console.ReadLine();
+        public string ReadLine() => Console.ReadLine();
 
         /* ================= USER BOOTSTRAP ================= */
 
@@ -79,15 +79,15 @@ namespace Aera
             string username;
             do
             {
-                WriteColor("Enter username: ", "Yellow");
-                username = GetInput();
+                WriteColored("Enter username: ", "Yellow");
+                username = ReadLine();
             } while (string.IsNullOrWhiteSpace(username));
 
             string password;
             do
             {
-                WriteColor("Enter password: ", "Yellow");
-                password = GetInput();
+                WriteColored("Enter password: ", "Yellow");
+                password = ReadLine();
             } while (string.IsNullOrWhiteSpace(password));
 
             UserCredentials[0] = username;
@@ -95,7 +95,7 @@ namespace Aera
 
             File.WriteAllLines("user.ss", UserCredentials);
 
-            WriteLineColor($"User {username} created.", "Green");
+            WriteLineColored($"User {username} created.", "Green");
             Thread.Sleep(1200);
             Console.Clear();
 
@@ -107,22 +107,22 @@ namespace Aera
             UserCredentials = inf;
         }
 
-        public void ValidatePassword()
+        public void Login()
         {
             while (true)
             {
-                WriteColor("Password: ", "Cyan");
-                string pass = GetInput();
+                WriteColored("Password: ", "Cyan");
+                string pass = ReadLine();
 
                 if (pass == UserCredentials[1])
                 {
-                    WriteLineColor("Login success", "Green");
+                    WriteLineColored("Login success", "Green");
                     Thread.Sleep(1000);
                     Console.Clear();
                     return;
                 }
 
-                WriteLineColor("Invalid password", "Red");
+                WriteLineColored("Invalid password", "Red");
                 Thread.Sleep(1000);
                 Console.Clear();
             }
@@ -132,41 +132,41 @@ namespace Aera
 
         public void ShowUser(bool sudo)
         {
-            WriteLineColor("User Information:", "DarkCyan");
-            WriteLineColor($" - Username: {UserCredentials[0]}", "DarkCyan");
+            WriteLineColored("User Information:", "DarkCyan");
+            WriteLineColored($" - Username: {UserCredentials[0]}", "DarkCyan");
 
             if (!sudo)
-                WriteLineColor($" - Password: {"".PadLeft(UserCredentials[1].Length, '*')}", "DarkCyan");
+                WriteLineColored($" - Password: {"".PadLeft(UserCredentials[1].Length, '*')}", "DarkCyan");
             else
-                WriteLineColor($" - Password: {UserCredentials[1]}", "DarkCyan");
+                WriteLineColored($" - Password: {UserCredentials[1]}", "DarkCyan");
         }
 
-        public string un() => UserCredentials[0];
+        public string GetUsername() => UserCredentials[0];
 
         /* ================= SUDO ================= */
 
         public bool AuthenticateSudo()
         {
-            WriteColor("[sudo] Enter password: ", "Yellow");
-            string attempt = GetInput();
+            WriteColored("[sudo] Enter password: ", "Yellow");
+            string attempt = ReadLine();
 
             if (attempt != UserCredentials[1])
             {
-                WriteLineColor("No sudo: authentication failed.", "Red");
+                WriteLineColored("No sudo: authentication failed.", "Red");
                 return false;
             }
 
-            WriteLineColor("Access granted.", "Green");
+            WriteLineColored("Access granted.", "Green");
             IsSudo = true;
             return true;
         }
         public bool Confirm(string message, bool defaultYes = false)
         {
             var suffix = defaultYes ? "(Y/n)" : "(y/N)";
-            WriteColor("! ", "yellow");
+            WriteColored("! ", "yellow");
             Write($"{message} {suffix} ");
 
-            var input = GetInput()?.Trim().ToLowerInvariant();
+            var input = ReadLine()?.Trim().ToLowerInvariant();
 
             if (string.IsNullOrEmpty(input))
                 return defaultYes;

@@ -22,7 +22,7 @@ namespace Aera
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
         {
-            tool.WriteLineColor("example: cannot be used in a pipe", "Red");
+            tool.WriteLineColored("example: cannot be used in a pipe", "Red");
         }
     }
 }

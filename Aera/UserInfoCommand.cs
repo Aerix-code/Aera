@@ -44,7 +44,7 @@
                 return;
             }
 
-            tool.WriteLineColor(tool.un(), "Blue");
+            tool.WriteLineColored(tool.GetUsername(), "Blue");
         }
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)

@@ -30,7 +30,7 @@ namespace Aera
             {
                 if (!File.Exists(file))
                 {
-                    tool.WriteLineColor($"grep: file not found: {file}", "Red");
+                    tool.WriteLineColored($"grep: file not found: {file}", "Red");
                     continue;
                 }
 
@@ -108,7 +108,7 @@ namespace Aera
 
             if (pattern == null)
             {
-                tool.WriteLineColor("grep: missing search pattern", "Red");
+                tool.WriteLineColored("grep: missing search pattern", "Red");
                 return false;
             }
 

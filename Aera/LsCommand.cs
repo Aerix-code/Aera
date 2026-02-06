@@ -17,10 +17,10 @@ namespace Aera
         {
             string dir = Directory.GetCurrentDirectory();
 
-            tool.WriteLineColor($"Directory: {dir}", "DarkCyan");
+            tool.WriteLineColored($"Directory: {dir}", "DarkCyan");
 
             foreach (var d in Directory.GetDirectories(dir))
-                tool.WriteLineColor($"[DIR]  {Path.GetFileName(d)}", "Yellow");
+                tool.WriteLineColored($"[DIR]  {Path.GetFileName(d)}", "Yellow");
 
             foreach (var f in Directory.GetFiles(dir))
                 tool.WriteLine($"[FILE] {Path.GetFileName(f)}");
@@ -28,7 +28,7 @@ namespace Aera
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
         {
-            tool.WriteLineColor("ls: cannot accept piped input", "Red");
+            tool.WriteLineColored("ls: cannot accept piped input", "Red");
         }
     }
 }

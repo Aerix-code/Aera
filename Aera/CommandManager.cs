@@ -126,13 +126,13 @@ namespace Aera
 
             if (!cmd.AcceptsPipeInput)
             {
-                tool.WriteLineColor($"Command '{name}' does not accept piped input.", "Red");
+                tool.WriteLineColored($"Command '{name}' does not accept piped input.", "Red");
                 return;
             }
 
             if (cmd.IsDestructive && !tool.IsSudo)
             {
-                tool.WriteLineColor($"'{name}' is destructive and requires sudo when piped.", "Red");
+                tool.WriteLineColored($"'{name}' is destructive and requires sudo when piped.", "Red");
                 return;
             }
 

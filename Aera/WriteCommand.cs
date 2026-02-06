@@ -43,17 +43,17 @@ namespace Aera
             switch (type)
             {
                 case "error":
-                    tool.WriteColor("ERROR: ", "Red");
+                    tool.WriteColored("ERROR: ", "Red");
                     tool.WriteLine(text);
                     break;
 
                 case "warning":
-                    tool.WriteColor("WARNING: ", "Yellow");
+                    tool.WriteColored("WARNING: ", "Yellow");
                     tool.WriteLine(text);
                     break;
 
                 case "success":
-                    tool.WriteColor("SUCCESS: ", "Green");
+                    tool.WriteColored("SUCCESS: ", "Green");
                     tool.WriteLine(text);
                     break;
 

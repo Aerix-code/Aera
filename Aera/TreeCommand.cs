@@ -44,7 +44,7 @@ namespace Aera
                     case "-L":
                         if (i + 1 >= args.Length || !int.TryParse(args[i + 1], out maxDepth))
                         {
-                            tool.WriteLineColor("tree: invalid depth for -L", "Red");
+                            tool.WriteLineColored("tree: invalid depth for -L", "Red");
                             return;
                         }
                         i++; // consume depth
@@ -53,7 +53,7 @@ namespace Aera
                     default:
                         if (args[i].StartsWith("-"))
                         {
-                            tool.WriteLineColor($"tree: unknown option '{args[i]}'", "Red");
+                            tool.WriteLineColored($"tree: unknown option '{args[i]}'", "Red");
                             return;
                         }
 
@@ -64,11 +64,11 @@ namespace Aera
 
             if (!Directory.Exists(path))
             {
-                tool.WriteLineColor("tree: directory not found", "Red");
+                tool.WriteLineColored("tree: directory not found", "Red");
                 return;
             }
 
-            tool.WriteLineColor(fullPath ? path : Path.GetFileName(path), "DarkCyan");
+            tool.WriteLineColored(fullPath ? path : Path.GetFileName(path), "DarkCyan");
             PrintTree(path, "", 0, maxDepth, dirsOnly, fullPath, tool);
         }
 
@@ -110,7 +110,7 @@ namespace Aera
             }
             catch
             {
-                tool.WriteLineColor($"{indent}└── [access denied]", "Red");
+                tool.WriteLineColored($"{indent}└── [access denied]", "Red");
                 return;
             }
 
@@ -129,7 +129,7 @@ namespace Aera
                     ? list[i]
                     : Path.GetFileName(list[i]);
 
-                tool.WriteLineColor(
+                tool.WriteLineColored(
                     $"{indent}{(isLast ? "└── " : "├── ")}{name}",
                     isDir ? "Yellow" : "Gray"
                 );

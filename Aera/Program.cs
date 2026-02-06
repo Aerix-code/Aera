@@ -55,17 +55,17 @@
             {
                 uinf = File.ReadAllLines("user.ss");
                 tl.LoadUserCredentials(uinf);
-                tl.ValidatePassword();
-                tl.WriteLineColor($"Hello {uinf[0]}", "Green");
+                tl.Login();
+                tl.WriteLineColored($"Hello {uinf[0]}", "Green");
             }
             else
                 uinf = tl.CreateUser();
-            string n = tl.un();
+            string n = tl.GetUsername();
 
             while (true)
             {
-                tl.WriteColor($"{n}> ", "Cyan");
-                string input = tl.GetInput();
+                tl.WriteColored($"{n}> ", "Cyan");
+                string input = tl.ReadLine();
                 manager.Execute(input, tl);
             }
 

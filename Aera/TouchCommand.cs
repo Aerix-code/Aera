@@ -35,17 +35,17 @@ namespace Aera
                     if (File.Exists(path))
                     {
                         File.SetLastWriteTime(path, DateTime.Now);
-                        tool.WriteLineColor($"Updated: {Path.GetFileName(path)}", "Yellow");
+                        tool.WriteLineColored($"Updated: {Path.GetFileName(path)}", "Yellow");
                     }
                     else
                     {
                         using (File.Create(path)) { }
-                        tool.WriteLineColor($"Created: {Path.GetFileName(path)}", "Green");
+                        tool.WriteLineColored($"Created: {Path.GetFileName(path)}", "Green");
                     }
                 }
                 catch (Exception ex)
                 {
-                    tool.WriteLineColor($"touch: {ex.Message}", "Red");
+                    tool.WriteLineColored($"touch: {ex.Message}", "Red");
                 }
             }
         }

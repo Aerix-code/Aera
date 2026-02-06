@@ -25,13 +25,13 @@ namespace Aera
 
             if (!File.Exists(path))
             {
-                tool.WriteLineColor("cat: file not found", "Red");
+                tool.WriteLineColored("cat: file not found", "Red");
                 return;
             }
 
             if ((File.GetAttributes(path) & FileAttributes.Directory) != 0)
             {
-                tool.WriteLineColor("cat: cannot read a directory", "Red");
+                tool.WriteLineColored("cat: cannot read a directory", "Red");
                 return;
             }
 
@@ -43,7 +43,7 @@ namespace Aera
         {
             if (args.Length != 0)
             {
-                tool.WriteLineColor("cat: cannot combine piped input with files", "Red");
+                tool.WriteLineColored("cat: cannot combine piped input with files", "Red");
                 return;
             }
 

@@ -28,21 +28,21 @@ namespace Aera
             }
             catch (DirectoryNotFoundException)
             {
-                tool.WriteLineColor("cd: no such directory", "Red");
+                tool.WriteLineColored("cd: no such directory", "Red");
             }
             catch (UnauthorizedAccessException)
             {
-                tool.WriteLineColor("cd: permission denied", "Red");
+                tool.WriteLineColored("cd: permission denied", "Red");
             }
             catch (Exception ex)
             {
-                tool.WriteLineColor($"cd: {ex.Message}", "Red");
+                tool.WriteLineColored($"cd: {ex.Message}", "Red");
             }
         }
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
         {
-            tool.WriteLineColor("cd: cannot be used in a pipe", "Red");
+            tool.WriteLineColored("cd: cannot be used in a pipe", "Red");
         }
     }
 }

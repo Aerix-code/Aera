@@ -17,7 +17,7 @@ namespace Aera
         {
             if (!tool.IsSudo)
             {
-                tool.WriteLineColor("rm: permission denied (sudo required)", "Red");
+                tool.WriteLineColored("rm: permission denied (sudo required)", "Red");
                 return;
             }
 
@@ -43,13 +43,13 @@ namespace Aera
 
             if (!isFile && !isDir)
             {
-                tool.WriteLineColor($"rm: cannot remove '{target}': No such file or directory", "Red");
+                tool.WriteLineColored($"rm: cannot remove '{target}': No such file or directory", "Red");
                 return;
             }
 
             if (isDir && !recursive)
             {
-                tool.WriteLineColor($"rm: cannot remove '{target}': Is a directory", "Red");
+                tool.WriteLineColored($"rm: cannot remove '{target}': Is a directory", "Red");
                 return;
             }
 
@@ -58,7 +58,7 @@ namespace Aera
 
             if (!tool.Confirm(msg, defaultYes: false))
             {
-                tool.WriteLineColor("rm: operation cancelled", "Yellow");
+                tool.WriteLineColored("rm: operation cancelled", "Yellow");
                 return;
             }
 
@@ -67,31 +67,31 @@ namespace Aera
                 if (isFile)
                 {
                     File.Delete(target);
-                    tool.WriteLineColor("File deleted", "green");
+                    tool.WriteLineColored("File deleted", "green");
                 }
                 else
                 {
                     Directory.Delete(target, recursive: true);
-                    tool.WriteLineColor("Directory deleted", "green");
+                    tool.WriteLineColored("Directory deleted", "green");
                 }
             }
             catch (UnauthorizedAccessException)
             {
-                tool.WriteLineColor("rm: permission denied", "Red");
+                tool.WriteLineColored("rm: permission denied", "Red");
             }
             catch (IOException ex)
             {
-                tool.WriteLineColor($"rm: {ex.Message}", "Red");
+                tool.WriteLineColored($"rm: {ex.Message}", "Red");
             }
             catch (Exception ex)
             {
-                tool.WriteLineColor($"rm: {ex.Message}", "Red");
+                tool.WriteLineColored($"rm: {ex.Message}", "Red");
             }
         }
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
         {
-            tool.WriteLineColor("rm: refusing to read from pipe (destructive command)", "Red");
+            tool.WriteLineColored("rm: refusing to read from pipe (destructive command)", "Red");
         }
     }
 }

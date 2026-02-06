@@ -41,7 +41,7 @@
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
         {
-            tool.WriteLineColor("help(man): cannot be used in a pipe", "Red");
+            tool.WriteLineColored("help(man): cannot be used in a pipe", "Red");
         }
     }
 }

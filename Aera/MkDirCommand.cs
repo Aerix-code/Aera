@@ -25,28 +25,28 @@ namespace Aera
 
             if (Directory.Exists(path))
             {
-                tool.WriteLineColor("mkdir: directory already exists", "Yellow");
+                tool.WriteLineColored("mkdir: directory already exists", "Yellow");
                 return;
             }
 
             try
             {
                 Directory.CreateDirectory(path);
-                tool.WriteLineColor("Directory created.", "Green");
+                tool.WriteLineColored("Directory created.", "Green");
             }
             catch (UnauthorizedAccessException)
             {
-                tool.WriteLineColor("mkdir: permission denied", "Red");
+                tool.WriteLineColored("mkdir: permission denied", "Red");
             }
             catch (Exception ex)
             {
-                tool.WriteLineColor($"mkdir: {ex.Message}", "Red");
+                tool.WriteLineColored($"mkdir: {ex.Message}", "Red");
             }
         }
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
         {
-            tool.WriteLineColor("mkdir: cannot be used in a pipe", "Red");
+            tool.WriteLineColored("mkdir: cannot be used in a pipe", "Red");
         }
     }
 }

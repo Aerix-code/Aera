@@ -17,7 +17,7 @@ namespace Aera
         {
             if (!tool.IsSudo)
             {
-                tool.WriteLineColor("mv: permission denied (sudo required)", "Red");
+                tool.WriteLineColored("mv: permission denied (sudo required)", "Red");
                 return;
             }
 
@@ -48,15 +48,15 @@ namespace Aera
             }
             catch (UnauthorizedAccessException)
             {
-                tool.WriteLineColor("mv: permission denied", "Red");
+                tool.WriteLineColored("mv: permission denied", "Red");
             }
             catch (IOException ex)
             {
-                tool.WriteLineColor($"mv: {ex.Message}", "Red");
+                tool.WriteLineColored($"mv: {ex.Message}", "Red");
             }
             catch (Exception ex)
             {
-                tool.WriteLineColor($"mv: {ex.Message}", "Red");
+                tool.WriteLineColored($"mv: {ex.Message}", "Red");
             }
         }
 
@@ -81,7 +81,7 @@ namespace Aera
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
         {
-            tool.WriteLineColor("mv: cannot be used in a pipe", "Red");
+            tool.WriteLineColored("mv: cannot be used in a pipe", "Red");
         }
     }
 }
