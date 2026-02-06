@@ -7,7 +7,7 @@ It is a **controlled CLI environment** with explicit behavior, predictable pipel
 
 ---
 
-## ✨ Goals
+## Goals
 
 - UNIX-style commands and pipelines
 - Clear, consistent command UX
@@ -19,7 +19,7 @@ Aera prioritizes **clarity over cleverness**.
 
 ---
 
-## 🧱 Core Features
+## Core Features
 
 ### Command System
 - Command registration with aliases
@@ -49,7 +49,7 @@ Aera prioritizes **clarity over cleverness**.
 
 ---
 
-## 🏗 Architecture Overview
+## Architecture Overview
 
 ### `ICommand`
 
@@ -109,7 +109,7 @@ Rendering help and man output
 
 This is where policy lives, not in commands.
 
-📚 Built-in Commands
+# Built-in Commands
 Core / Meta
 
 help, man — list commands or show manuals
@@ -170,7 +170,7 @@ write — formatted output helper
 
 hello — prints a random greeting
 
-🔗 Pipeline Examples
+# Pipeline Examples
 ls | grep .cs
 cat file.txt | grep error | wc
 echo hello world | wc -w
@@ -185,7 +185,7 @@ Commands may consume, transform, or forward input
 
 Pipe capture is handled centrally
 
-🔒 Safety Examples
+# Safety Examples
 rm file.txt
 # permission denied (sudo required)
 
@@ -195,19 +195,19 @@ sudo rm file.txt
 echo test | rm file.txt
 # rejected (destructive command in pipe)
 
-🛠 Adding a New Command
+# Adding a New Command
 
-Copy an existing command
+Copy the example command
 
 Implement ICommand
 
-Register it in the CommandManager
+Register it in program.cs in the logical location using the manager
 
 Done
 
 No hidden wiring. No magic.
 
-🚧 Non-Goals
+# Non-Goals
 
 Full-screen editors (nano, vim)
 
@@ -223,7 +223,7 @@ These are intentionally out of scope.
 
 MIT (or update as appropriate)
 
-🧠 Philosophy
+# Philosophy
 
 A shell should never surprise you.
 

@@ -45,21 +45,21 @@
             manager.Register(new HelloCommand());          // hello | hi | hey | hai — print a greeting to the console
             manager.Register(new EchoCommand());           // echo — write text to the console
 
-            string[] UserCredentials = new string[2]; 
+            string[] UserCredentials = new string[2];
             var tool = new ShellContext();
 
             tool.WriteLine("Welcome to Aera CLI!");
             Thread.Sleep(1500);
             manager.Execute("clear", tool);
             if (File.Exists("user.ss"))
-            {
-                UserCredentials = File.ReadAllLines("user.ss");
-                tool.LoadUserCredentials(UserCredentials);
-                tool.Login();
-                tool.WriteLineColored($"Hello {UserCredentials[0]}", "Green");
-            }
-            else
-                UserCredentials = tool.CreateUser();
+                {
+                    UserCredentials = File.ReadAllLines("user.ss");
+                    tool.LoadUserCredentials(UserCredentials);
+                    tool.Login();
+                    tool.WriteLineColored($"Hello {UserCredentials[0]}", "Green");
+                }
+                else
+                    UserCredentials = tool.CreateUser();
             string n = tool.GetUsername();
 
             while (true)
