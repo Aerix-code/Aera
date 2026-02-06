@@ -8,7 +8,7 @@ namespace Aera
     {
         public string Name => "grep";
         public string Description => "Search for lines matching a pattern";
-        public string Usage => "Usage: grep [options] <pattern> [file...]";
+        public string Usage => "Usage: grep [-i] [-v] <pattern> [file...]";
 
         public bool AcceptsPipeInput => true;
         public bool IsDestructive => false;
@@ -20,7 +20,13 @@ namespace Aera
             if (!TryParse(args, tool, out var options, out var pattern, out var files))
                 return;
 
-            tool.CaptureMode = true;
+            if (files.Count == 0)
+            {
+                tool.WriteLineColored(
+                    "grep: no input files (use a pipe or specify files)",
+                    "Red");
+                return;
+            }
 
             var comparison = options.IgnoreCase
                 ? StringComparison.OrdinalIgnoreCase
@@ -40,8 +46,6 @@ namespace Aera
                         tool.WriteLine(line);
                 }
             }
-
-            tool.FlushPipeBuffer();
         }
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
@@ -49,21 +53,17 @@ namespace Aera
             if (!TryParse(args, tool, out var options, out var pattern, out _))
                 return;
 
-            tool.CaptureMode = true;
-
             var comparison = options.IgnoreCase
                 ? StringComparison.OrdinalIgnoreCase
                 : StringComparison.Ordinal;
 
-            var lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (var line in lines)
+            foreach (var raw in input.Split('\n'))
             {
+                var line = raw.TrimEnd('\r');
+
                 if (Matches(line, pattern, comparison, options.Invert))
                     tool.WriteLine(line);
             }
-
-            tool.FlushPipeBuffer();
         }
 
         /* ================= HELPERS ================= */

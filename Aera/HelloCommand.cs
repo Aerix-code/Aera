@@ -7,7 +7,7 @@ namespace Aera
         public string Description => "Prints a random hello message"; // i got bored
         public string Usage => "Usage: hello";
 
-        public bool AcceptsPipeInput => false;
+        public bool AcceptsPipeInput => true;
         public bool IsDestructive => false;
 
         public string[] Aliases => new[] { "hi", "hey", "hai" };
@@ -22,7 +22,9 @@ namespace Aera
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
         {
-            tool.WriteLineColored("example: cannot be used in a pipe", "Red");
+            tool.Write(input);
+            tool.WriteLine(string.Empty);
+            Execute(args, tool);
         }
     }
 }

@@ -26,10 +26,12 @@
             manager.Register(new LsCommand());             // ls — list files and directories in the current directory
             manager.Register(new TreeCommand());           // tree — display directory structure recursively
             manager.Register(new CatCommand());            // cat — output the contents of a file
+            manager.Register(new GrepCommand());           // grep — search for lines matching a pattern
+            manager.Register(new WcCommand());             // wc — count lines, words, and characters
 
             // ───────────── Filesystem: Mutation ─────────────
             manager.Register(new TouchCommand());          // touch — create empty files or update timestamps
-            manager.Register(new MkdirCommand());          // mkdir — create a new directory
+            manager.Register(new MkdirCommand());           // mkdir — create a new directory
             manager.Register(new RmCommand());             // rm — delete files or directories (destructive)
             manager.Register(new CpCommand());             // cp — copy files or directories
             manager.Register(new MvCommand());             // mv — move or rename files and directories
@@ -41,32 +43,30 @@
             // ───────────── Output / Piping Helpers ─────────────
             manager.Register(new WriteCommand());          // write — print formatted messages to the console
             manager.Register(new HelloCommand());          // hello | hi | hey | hai — print a greeting to the console
+            manager.Register(new EchoCommand());           // echo — write text to the console
 
-            // oh god these names suck
-            // but i am too tired to change them now :>
-            // 1 week later: still haven't changed them
-            string[] uinf = new string[2];
-            var tl = new ShellContext();
+            string[] UserCredentials = new string[2]; 
+            var tool = new ShellContext();
 
-            tl.WriteLine("Welcome to Aera CLI!");
+            tool.WriteLine("Welcome to Aera CLI!");
             Thread.Sleep(1500);
-            manager.Execute("clear", tl);
+            manager.Execute("clear", tool);
             if (File.Exists("user.ss"))
             {
-                uinf = File.ReadAllLines("user.ss");
-                tl.LoadUserCredentials(uinf);
-                tl.Login();
-                tl.WriteLineColored($"Hello {uinf[0]}", "Green");
+                UserCredentials = File.ReadAllLines("user.ss");
+                tool.LoadUserCredentials(UserCredentials);
+                tool.Login();
+                tool.WriteLineColored($"Hello {UserCredentials[0]}", "Green");
             }
             else
-                uinf = tl.CreateUser();
-            string n = tl.GetUsername();
+                UserCredentials = tool.CreateUser();
+            string n = tool.GetUsername();
 
             while (true)
             {
-                tl.WriteColored($"{n}> ", "Cyan");
-                string input = tl.ReadLine();
-                manager.Execute(input, tl);
+                tool.WriteColored($"{n}> ", "Cyan");
+                string input = tool.ReadLine();
+                manager.Execute(input, tool);
             }
 
         }
