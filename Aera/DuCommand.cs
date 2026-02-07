@@ -8,7 +8,7 @@ namespace Aera
     {
         public string Name => "du";
         public string Description => "Shows directory disk usage";
-        public string Usage => "Usage: du [directory]";
+        public string Usage => "Usage: du [directory] [-b|-k|-m|-g|-t]";
 
         public bool AcceptsPipeInput => false;
         public bool IsDestructive => false;
@@ -17,7 +17,28 @@ namespace Aera
 
         public void Execute(string[] args, ShellContext tool)
         {
-            string dir = args.Length > 0 ? args[0] : Directory.GetCurrentDirectory();
+            string dir = Directory.GetCurrentDirectory();
+            char unit = 'b'; // default = bytes
+
+            foreach (var arg in args)
+            {
+                if (arg.StartsWith("-") && arg.Length == 2)
+                {
+                    char flag = char.ToLower(arg[1]);
+
+                    if ("bk mgt".Replace(" ", "").Contains(flag))
+                        unit = flag;
+                    else
+                    {
+                        tool.WriteLineColored($"Invalid option: {arg}", "Red");
+                        return;
+                    }
+                }
+                else
+                {
+                    dir = arg;
+                }
+            }
 
             if (!Directory.Exists(dir))
             {
@@ -25,16 +46,49 @@ namespace Aera
                 return;
             }
 
-            long size = Directory
-                .EnumerateFiles(dir, "*", SearchOption.AllDirectories)
-                .Sum(f => new FileInfo(f).Length);
+            try
+            {
+                long sizeBytes = Directory
+                    .EnumerateFiles(dir, "*", SearchOption.AllDirectories)
+                    .Sum(f => new FileInfo(f).Length);
 
-            tool.WriteLine($"{size} bytes");
+                double converted = ConvertSize(sizeBytes, unit);
+
+                tool.WriteLine($"{converted:0.##} {UnitLabel(unit)}");
+            }
+            catch (Exception ex)
+            {
+                tool.WriteLineColored($"Error: {ex.Message}", "Red");
+            }
         }
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
         {
-            Execute(new[] { input.Trim() }, tool);
+            Execute(args.Append(input.Trim()).ToArray(), tool);
+        }
+
+        private double ConvertSize(long bytes, char unit)
+        {
+            return unit switch
+            {
+                'k' => bytes / 1024.0,
+                'm' => bytes / Math.Pow(1024, 2),
+                'g' => bytes / Math.Pow(1024, 3),
+                't' => bytes / Math.Pow(1024, 4),
+                _ => bytes
+            };
+        }
+
+        private string UnitLabel(char unit)
+        {
+            return unit switch
+            {
+                'k' => "KB",
+                'm' => "MB",
+                'g' => "GB",
+                't' => "TB",
+                _ => "bytes"
+            };
         }
     }
 }
