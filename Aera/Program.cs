@@ -1,10 +1,13 @@
-﻿namespace Aera
+﻿using System.Text;
+
+namespace Aera
 {
     internal class Program
     {
         static void Main(string[] args)
         {
             var manager = new CommandManager();
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
 
             // Register commands
 
@@ -39,6 +42,7 @@
             // ───────────────────── Utilities ─────────────────────
             manager.Register(new DateCommand());           // date — display the current date
             manager.Register(new TimeCommand());           // time — display the current time
+            manager.Register(new FastFetchCommand());      // fastfetch | fetch - displays device info in a square
 
             // ───────────── Output / Piping Helpers ─────────────
             manager.Register(new WriteCommand());          // write — print formatted messages to the console
@@ -56,12 +60,11 @@
                     UserCredentials = File.ReadAllLines("user.ss");
                     tool.LoadUserCredentials(UserCredentials);
                     tool.Login();
-                    tool.WriteLineColored($"Hello {UserCredentials[0]}", "Green");
                 }
                 else
                     UserCredentials = tool.CreateUser();
             string n = tool.GetUsername();
-
+            manager.Execute("fetch", tool);
             while (true)
             {
                 tool.WriteColored($"{n}> ", "Cyan");

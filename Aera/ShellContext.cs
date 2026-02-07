@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Linq;
 using System.Threading;
 
 namespace Aera
@@ -174,5 +175,44 @@ namespace Aera
             return input == "y" || input == "yes";
         }
 
+        public string RenderRoundedBox(string[] lines)
+        {
+            if (lines == null || lines.Length == 0)
+                return string.Empty;
+
+            int longest = lines.Max(l => l?.Length ?? 0);
+            int contentWidth = longest + 5;
+
+            const string topLeft = "╭";
+            const string topRight = "╮";
+            const string bottomLeft = "╰";
+            const string bottomRight = "╯";
+            const string horizontal = "─";
+            const string vertical = "│";
+
+            // ANSI Colors
+            const string green = "\u001b[32m";
+            const string white = "\u001b[37m";
+            const string reset = "\u001b[0m";
+
+            StringBuilder sb = new StringBuilder();
+
+            // Top border
+            sb.AppendLine($"{green}{topLeft}{new string(horizontal[0], contentWidth + 2)}{topRight}{reset}");
+
+            // Content lines
+            foreach (var line in lines)
+            {
+                string safeLine = line ?? string.Empty;
+                string padded = safeLine.PadRight(contentWidth, ' ');
+
+                sb.AppendLine($"{green}{vertical}{reset} {white}{padded}{reset} {green}{vertical}{reset}");
+            }
+
+            // Bottom border
+            sb.Append($"{green}{bottomLeft}{new string(horizontal[0], contentWidth + 2)}{bottomRight}{reset}");
+
+            return sb.ToString();
+        }
     }
 }
