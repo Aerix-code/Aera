@@ -37,7 +37,7 @@ namespace Aera
                     continue;
                 }
 
-                foreach (var line in File.ReadLines(file))
+                foreach (string line in File.ReadLines(file))
                 {
                     if (pattern != null && Matches(line, pattern, comparison, options.Invert))
                         tool.WriteLine(line);
@@ -71,7 +71,7 @@ namespace Aera
             StringComparison comparison,
             bool invert)
         {
-            bool found = line.IndexOf(pattern, comparison) >= 0;
+            var found = line.IndexOf(pattern, comparison) >= 0;
             return invert ? !found : found;
         }
 
@@ -88,7 +88,7 @@ namespace Aera
 
             foreach (var arg in args)
             {
-                if (arg.StartsWith("-"))
+                if (arg.StartsWith($"-"))
                 {
                     if (arg.Contains('i')) options.IgnoreCase = true;
                     if (arg.Contains('v')) options.Invert = true;
