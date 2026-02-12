@@ -3,6 +3,7 @@ namespace Aera
     // hypothetical
     
     // save current console to console.txt,
+    // clear console,
     // run second program Nano,
     // Nano runs and does what it should,
     // Nano closes starts aera with a variable that skips login and loads console.txt,
