@@ -27,7 +27,7 @@ namespace Aera.Commands
             {
                 var psi = new ProcessStartInfo
                 {
-                    FileName = "python3", // or "python"
+                    FileName = "python3",
                     Arguments = $"nano.py \"{file}\"",
                     UseShellExecute = false,
                     RedirectStandardInput = false,
@@ -37,7 +37,7 @@ namespace Aera.Commands
 
                 var process = Process.Start(psi);
 
-                process.WaitForExit(); // <<< THIS is the important part
+                process.WaitForExit();
             }
             catch (Exception ex)
             {
