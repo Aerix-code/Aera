@@ -1,4 +1,6 @@
-﻿namespace Aera
+﻿using Aera.Commands;
+
+namespace Aera
 {
     internal class Program
     {

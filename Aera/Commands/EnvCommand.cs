@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Aera
+namespace Aera.Commands
 {
     internal class EnvCommand : ICommand
     {

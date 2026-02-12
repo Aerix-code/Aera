@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Aera
+namespace Aera.Commands
 {
     internal class FastFetchCommand : ICommand
     {

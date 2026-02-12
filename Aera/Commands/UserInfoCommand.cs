@@ -1,4 +1,4 @@
-﻿namespace Aera
+﻿namespace Aera.Commands
 {
     internal class UserInfoCommand : ICommand
     {

@@ -1,7 +1,7 @@
 ﻿// Copy this file to create new commands.
 // Do not modify structure unless ICommand changes.
 
-namespace Aera
+namespace Aera.Commands
 {
     internal class ExampleCommand : ICommand
     {

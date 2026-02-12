@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Aera
+namespace Aera.Commands
 {
     internal class EchoCommand : ICommand
     {

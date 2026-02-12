@@ -1,5 +1,5 @@
 ﻿
-namespace Aera
+namespace Aera.Commands
 {
     internal class GrepCommand : ICommand
     {
