@@ -50,6 +50,7 @@
             manager.Register(new RmCommand()); // rm — delete files or directories (destructive)
             manager.Register(new CpCommand()); // cp — copy files or directories
             manager.Register(new MvCommand()); // mv — move or rename files and directories
+            manager.Register(new NanoCommand()); // nano — edit file content
 
             // ───────────────────── Text Processing ─────────────────────
             manager.Register(new SortCommand()); // sort — sort lines alphabetically
