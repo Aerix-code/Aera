@@ -27,7 +27,7 @@ namespace Aera
             /* =================== PY FILE PATH =================== */
             
             string pyfile = @"nano.py";
-            string pyfullPath = Path.GetFullPath(file);
+            string pyfullPath = Path.GetFullPath(pyfile);
             Py = pyfullPath;
 
             /* ================= REGISTER COMMANDS ================= */

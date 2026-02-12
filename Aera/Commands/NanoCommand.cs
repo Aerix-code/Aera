@@ -28,7 +28,7 @@ namespace Aera.Commands
                 var psi = new ProcessStartInfo
                 {
                     FileName = "python3",
-                    Arguments = $"nano.py \"{file}\"",
+                    Arguments = $"{Program.Py} \"{file}\"",
                     UseShellExecute = false,
                     RedirectStandardInput = false,
                     RedirectStandardOutput = false,
