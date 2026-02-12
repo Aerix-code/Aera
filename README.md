@@ -35,7 +35,8 @@ The project focuses on:
 - `touch` – Create files  
 - `tree` – Display directory structure  
 - `stat` – File information  
-- `du` – Disk usage  
+- `du` – Disk usage
+- `nano` - File editing
 
 #### File Viewing & Processing
 - `cat` – Output file contents  
