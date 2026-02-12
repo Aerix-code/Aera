@@ -4,16 +4,16 @@ namespace Aera
     
     // save current console to console.txt,
     // clear console,
-    // run second program Nano,
+    // run second program Nano and give the file we want to edit,
     // Nano runs and does what it should,
     // Nano closes starts aera with a variable that skips login and loads console.txt,
-    // console.txt loads and makes console content reappear as if nothing happened.
+    // console.txt loads and makes console content reappear.
     
     internal class NanoCommand : ICommand
     {
-        public string Name => "nano <file>";
+        public string Name => "nano";
         public string Description => "Edit document contents";
-        public string Usage => "Usage: nano";
+        public string Usage => "Usage: nano <file>";
 
         public bool AcceptsPipeInput => false;
         public bool IsDestructive => true;
