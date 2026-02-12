@@ -1,8 +1,3 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-
 namespace Aera
 {
     internal class DuCommand : ICommand
@@ -65,7 +60,7 @@ namespace Aera
 
             try
             {
-                long total = CalculateDirectory(dir, tool, dir, 0, depthLimit, summary, human, unit);
+                long total = CalculateDirectory(tool, dir, 0, depthLimit, summary, human, unit);
                 
                 if (summary)
                     PrintSize(total, dir, tool, human, unit);
@@ -84,7 +79,6 @@ namespace Aera
         /* ================= CORE SIZE LOGIC ================= */
 
         private long CalculateDirectory(
-            string root,
             ShellContext tool,
             string current,
             int depth,
@@ -106,15 +100,21 @@ namespace Aera
                     {
                         size += new FileInfo(file).Length;
                     }
-                    catch { }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
 
                 foreach (var dir in Directory.EnumerateDirectories(current))
                 {
-                    size += CalculateDirectory(root, tool, dir, depth + 1, depthLimit, summary, human, unit);
+                    size += CalculateDirectory(tool, dir, depth + 1, depthLimit, summary, human, unit);
                 }
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
 
             if (!summary && depth <= depthLimit)
                 PrintSize(size, current, tool, human, unit);

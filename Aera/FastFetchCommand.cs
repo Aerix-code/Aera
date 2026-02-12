@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace Aera
 {
@@ -18,7 +15,7 @@ namespace Aera
 
         public void Execute(string[] args, ShellContext tool)
         {
-            string[] userCredentials = File.ReadAllLines(Program.user);
+            string[] userCredentials = File.ReadAllLines(Program.User);
 
             tool.LoadUserCredentials(userCredentials);
 
@@ -100,7 +97,10 @@ namespace Aera
                     return (total, used);
                 }
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
 
             return (0, 0);
         }
@@ -109,7 +109,6 @@ namespace Aera
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         private class Memorystatusex
         {
-            public uint dwLength = (uint)Marshal.SizeOf(typeof(Memorystatusex));
             public uint dwMemoryLoad;
             public ulong ullTotalPhys;
             public ulong ullAvailPhys;

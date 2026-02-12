@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Aera
+﻿namespace Aera
 {
     /// <summary>
     /// Central dispatcher and registry for all CLI commands.
@@ -183,7 +179,7 @@ namespace Aera
         /// </summary>
         public bool TryGet(string name, out ICommand cmd)
         {
-            return _commands.TryGetValue(name, out cmd);
+            return _commands.TryGetValue(name, out cmd!);
         }
 
         /// <summary>

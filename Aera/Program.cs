@@ -1,10 +1,8 @@
-﻿using System.Text;
-
-namespace Aera
+﻿namespace Aera
 {
     internal class Program
     {
-        public static string user = "";
+        public static string User = "";
         static void Main(string[] args)
         {
             var manager = new CommandManager();
@@ -16,7 +14,7 @@ namespace Aera
             string fullPath;
             string file = @"user.ss";
             fullPath = Path.GetFullPath(file);
-            user = fullPath;
+            User = fullPath;
 
             // Register commands
 

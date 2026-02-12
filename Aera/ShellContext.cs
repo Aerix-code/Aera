@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Linq;
-using System.Threading;
+﻿using System.Text;
 
 namespace Aera
 {
@@ -69,7 +65,7 @@ namespace Aera
             return result;
         }
 
-        public string ReadLine() => Console.ReadLine();
+        public string ReadLine() => Console.ReadLine() ?? string.Empty;
 
         /* ================= USER BOOTSTRAP ================= */
 
@@ -177,7 +173,7 @@ namespace Aera
 
         public string RenderRoundedBox(string[] lines)
         {
-            if (lines == null || lines.Length == 0)
+            if (lines.Length == 0)
                 return string.Empty;
 
             int longest = lines.Max(l => l?.Length ?? 0);

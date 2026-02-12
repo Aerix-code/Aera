@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace Aera
+﻿namespace Aera
 {
     internal class CdCommand : ICommand
     {

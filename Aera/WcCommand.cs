@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace Aera
+﻿namespace Aera
 {
     internal class WcCommand : ICommand
     {
@@ -60,7 +57,7 @@ namespace Aera
             var lines = text.Count(c => c == '\n');
 
             var words = text
-                .Split((char[])null!, StringSplitOptions.RemoveEmptyEntries)
+                .Split((char[])null, StringSplitOptions.RemoveEmptyEntries)
                 .Length;
 
             return (lines, words, chars);
@@ -96,7 +93,7 @@ namespace Aera
             out string[] files)
         {
             options = new WcOptions();
-            var fileList = new System.Collections.Generic.List<string>();
+            var fileList = new List<string>();
 
             foreach (var arg in args)
             {

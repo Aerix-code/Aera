@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 namespace Aera
 {
     internal class StatCommand : ICommand

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 
 namespace Aera
 {
@@ -27,17 +25,17 @@ namespace Aera
 
         /* ================= CORE ================= */
 
-        private void ProcessEcho(string pipedInput, string[] args, ShellContext tool)
+        private void ProcessEcho(string? pipedInput, string[] args, ShellContext tool)
         {
             bool newline = true;
             bool interpretEscapes = false;
-            string color = null;
+            string? color = null;
             bool upper = false;
             bool lower = false;
             bool box = false;
             int repeat = 1;
 
-            var textParts = new System.Collections.Generic.List<string>();
+            var textParts = new List<string>();
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -99,7 +97,7 @@ namespace Aera
                 }
                 else
                 {
-                    Output(text, newline, color, tool);
+                    if (color != null) Output(text, newline, color, tool);
                 }
             }
         }

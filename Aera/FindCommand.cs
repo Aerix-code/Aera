@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Collections.Generic;
-
 namespace Aera
 {
     internal class FindCommand : ICommand
@@ -60,13 +56,19 @@ namespace Aera
                 {
                     files = Directory.GetFiles(current);
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
 
                 try
                 {
                     dirs = Directory.GetDirectories(current);
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
 
                 foreach (var file in files)
                 {

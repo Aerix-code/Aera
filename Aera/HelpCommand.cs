@@ -1,10 +1,7 @@
 ﻿namespace Aera
 {
-    internal class HelpCommand : ICommand
+    internal class HelpCommand(CommandManager mgr) : ICommand
     {
-        private readonly CommandManager _manager;
-        public HelpCommand(CommandManager mgr) => _manager = mgr;
-
         public string Name => "help";
         public string Description => "Lists all available commands";
         public string Usage => "Usage: help <command>(optional)";
@@ -18,25 +15,25 @@
         {
             if (args.Length == 0)
             {
-                _manager.ShowAll(tool);
+                mgr.ShowAll(tool);
                 return;
             }
 
             if (args.Contains("--help"))
             {
-                _manager.ShowCommandHelp(this, tool);
+                mgr.ShowCommandHelp(this, tool);
                 return;
             }
 
             var name = args[0].ToLower();
 
-            if (!_manager.TryGet(name, out var cmd))
+            if (!mgr.TryGet(name, out var cmd))
             {
                 tool.WriteLine($"No manual entry for '{name}'.");
                 return;
             }
 
-            _manager.ShowCommandHelp(cmd, tool);
+            mgr.ShowCommandHelp(cmd, tool);
         }
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)

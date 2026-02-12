@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace Aera
+﻿namespace Aera
 {
     internal class PwdCommand : ICommand
     {

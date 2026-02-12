@@ -1,12 +1,7 @@
-﻿using System;
-using System.Linq;
-
-namespace Aera
+﻿namespace Aera
 {
-    internal class SudoCommand : ICommand
+    internal class SudoCommand(CommandManager mgr) : ICommand
     {
-        private readonly CommandManager _manager;
-
         public string Name => "sudo";
         public string Description => "Executes a command with elevated privileges";
         public string Usage => "Usage: sudo <command>";
@@ -14,11 +9,6 @@ namespace Aera
         public bool AcceptsPipeInput => false;
         public bool IsDestructive => false;
         public string[] Aliases => Array.Empty<string>();
-
-        public SudoCommand(CommandManager mgr)
-        {
-            _manager = mgr;
-        }
 
         public void Execute(string[] args, ShellContext tool)
         {
@@ -39,7 +29,7 @@ namespace Aera
                 var commandName = args[0];
                 string[] commandArgs = args.Skip(1).ToArray();
 
-                _manager.ExecuteSudo(commandName, commandArgs, tool);
+                mgr.ExecuteSudo(commandName, commandArgs, tool);
             }
             finally
             {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-
-namespace Aera
+﻿namespace Aera
 {
     internal class TreeCommand : ICommand
     {
@@ -115,7 +111,7 @@ namespace Aera
             }
 
             var entries = dirsOnly
-                ? dirs.Cast<string>()
+                ? dirs
                 : dirs.Concat(files);
 
             var list = entries.ToArray();

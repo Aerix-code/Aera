@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Aera
+﻿namespace Aera
 {
     internal class WriteCommand : ICommand
     {

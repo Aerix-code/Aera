@@ -1,5 +1,4 @@
-﻿using System;
-// Copy this file to create new commands.
+﻿// Copy this file to create new commands.
 // Do not modify structure unless ICommand changes.
 
 namespace Aera

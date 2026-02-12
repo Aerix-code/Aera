@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Aera
+﻿namespace Aera
 {
     internal class ClearCommand : ICommand
     {
@@ -27,7 +25,7 @@ namespace Aera
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
         {
-            tool.WriteLine("clear: does not accept piped input"); // this is because i am lazy
+            tool.WriteLine("clear: does not accept piped input");
         }
     }
 }
