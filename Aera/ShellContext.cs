@@ -1,61 +1,174 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Aera
 {
     internal class ShellContext
     {
+        /* =========================================================
+           STATE
+        ========================================================= */
+
         public bool IsSudo { get; set; }
         public bool CaptureMode { get; set; }
 
         private readonly StringBuilder _buffer = new();
         private string[] _userCredentials = new string[2];
 
-        /* ================= OUTPUT ================= */
+        /* =========================================================
+           ANSI / COLOR SYSTEM
+        ========================================================= */
 
-        public void WriteLine(string t)
+        private const string Reset = "\x1b[0m";
+
+        private static readonly Dictionary<string, (int r, int g, int b)> NamedColors =
+            new(StringComparer.OrdinalIgnoreCase)
+            {
+                ["Black"] = (0,0,0),
+                ["White"] = (255,255,255),
+                ["Red"] = (255,0,0),
+                ["Green"] = (25,172,12),
+                ["Blue"] = (0,120,255),
+                ["Yellow"] = (255,220,0),
+                ["Cyan"] = (0,255,255),
+                ["Magenta"] = (255,0,255),
+                ["Metablue"] = (45,175,200),
+
+                ["DarkCyan"] = (12,120,120),
+                ["DarkRed"] = (139,0,0),
+                ["DarkGreen"] = (0,160,0),
+                ["DarkYellow"] = (200,150,0),
+                ["Gray"] = (180,180,180),
+                ["DarkGray"] = (120,120,120)
+            };
+
+        public static class Theme
         {
-            if (CaptureMode)
-                _buffer.AppendLine(t);
-            else
-                Console.WriteLine(t);
+            public const string Prompt = "Yellow";
+            public const string Error = "Red";
+            public const string Success = "Green";
+            public const string Info = "DarkCyan";
+            public const string Accent = "Metablue";
         }
 
-        public void Write(string t)
+        private bool TryResolveColor(string input, out string ansi)
         {
-            if (CaptureMode)
-                _buffer.Append(t);
-            else
-                Console.Write(t);
+            ansi = "";
+
+            if (string.IsNullOrWhiteSpace(input))
+                return false;
+
+            if (NamedColors.TryGetValue(input.Trim(), out var rgb))
+            {
+                ansi = $"\x1b[38;2;{rgb.r};{rgb.g};{rgb.b}m";
+                return true;
+            }
+
+            var parts = input.Split(',');
+
+            if (parts.Length == 3 &&
+                int.TryParse(parts[0].Trim(), out int r) &&
+                int.TryParse(parts[1].Trim(), out int g) &&
+                int.TryParse(parts[2].Trim(), out int b))
+            {
+                ansi = $"\x1b[38;2;{r};{g};{b}m";
+                return true;
+            }
+
+            return false;
         }
 
-        public void WriteColored(string t, string c)
+        /* =========================================================
+           ANSI UTILITIES
+        ========================================================= */
+
+        private static readonly Regex AnsiRegex =
+            new(@"\x1B\[[0-9;]*m", RegexOptions.Compiled);
+
+        private static string StripAnsi(string input)
+            => AnsiRegex.Replace(input, "");
+
+        private static int VisibleLength(string input)
+            => StripAnsi(input).Length;
+
+        private static string PadRightAnsi(string input, int width)
+        {
+            int padding = Math.Max(0, width - VisibleLength(input));
+            return input + new string(' ', padding);
+        }
+
+        /* =========================================================
+           GRADIENT UTILITIES
+        ========================================================= */
+
+        public string[] ApplyVerticalGradient(
+            string[] lines,
+            (int r, int g, int b) start,
+            (int r, int g, int b) end)
+        {
+            if (lines == null || lines.Length == 0)
+                return Array.Empty<string>();
+
+            string[] result = new string[lines.Length];
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                double t = lines.Length == 1
+                    ? 1.0
+                    : (double)i / (lines.Length - 1);
+
+                int r = (int)(start.r + (end.r - start.r) * t);
+                int g = (int)(start.g + (end.g - start.g) * t);
+                int b = (int)(start.b + (end.b - start.b) * t);
+
+                result[i] = $"\x1b[38;2;{r};{g};{b}m{lines[i]}{Reset}";
+            }
+
+            return result;
+        }
+
+        /* =========================================================
+           OUTPUT
+        ========================================================= */
+
+        public void Write(string text)
+        {
+            if (CaptureMode) _buffer.Append(text);
+            else Console.Write(text);
+        }
+
+        public void WriteLine(string text)
+        {
+            if (CaptureMode) _buffer.AppendLine(text);
+            else Console.WriteLine(text);
+        }
+
+        public void WriteColored(string text, string color)
         {
             if (CaptureMode)
             {
-                _buffer.Append(t);
+                _buffer.Append(text);
                 return;
             }
 
-            if (Enum.TryParse<ConsoleColor>(c, true, out var color))
-                Console.ForegroundColor = color;
-
-            Console.Write(t);
-            Console.ResetColor();
+            if (TryResolveColor(color, out var ansi))
+                Console.Write($"{ansi}{text}{Reset}");
+            else
+                Console.Write(text);
         }
 
-        public void WriteLineColored(string t, string c)
+        public void WriteLineColored(string text, string color)
         {
             if (CaptureMode)
             {
-                _buffer.AppendLine(t);
+                _buffer.AppendLine(text);
                 return;
             }
 
-            if (Enum.TryParse<ConsoleColor>(c, true, out var color))
-                Console.ForegroundColor = color;
-
-            Console.WriteLine(t);
-            Console.ResetColor();
+            if (TryResolveColor(color, out var ansi))
+                Console.WriteLine($"{ansi}{text}{Reset}");
+            else
+                Console.WriteLine(text);
         }
 
         public string FlushPipeBuffer()
@@ -65,49 +178,44 @@ namespace Aera
             return result;
         }
 
-        public string ReadLine() => Console.ReadLine() ?? string.Empty;
+        public string ReadLine()
+            => Console.ReadLine() ?? string.Empty;
 
-        /* ================= USER BOOTSTRAP ================= */
+        /* =========================================================
+           USER BOOTSTRAP / AUTH
+        ========================================================= */
 
         public string GetPassword()
         {
-            WriteColored("Enter password: ", "Yellow");
+            WriteColored("Enter password: ", Theme.Prompt);
 
-            List<char> passwordChars = new();
-            ConsoleKeyInfo key;
+            List<char> buffer = new();
 
             while (true)
             {
-                key = Console.ReadKey(intercept: true);
+                var key = Console.ReadKey(true);
 
-                // Stop on Enter
                 if (key.Key == ConsoleKey.Enter)
                 {
                     Console.WriteLine();
                     break;
                 }
 
-                // Handle Backspace
-                if (key.Key == ConsoleKey.Backspace)
+                if (key.Key == ConsoleKey.Backspace && buffer.Count > 0)
                 {
-                    if (passwordChars.Count > 0)
-                    {
-                        passwordChars.RemoveAt(passwordChars.Count - 1);
-                        Console.Write("\b \b"); // remove masking character
-                    }
-
+                    buffer.RemoveAt(buffer.Count - 1);
+                    Console.Write("\b \b");
                     continue;
                 }
 
-                // Ignore control characters
-                if (char.IsControl(key.KeyChar))
-                    continue;
-
-                passwordChars.Add(key.KeyChar);
-                Console.Write("*"); // mask input
+                if (!char.IsControl(key.KeyChar))
+                {
+                    buffer.Add(key.KeyChar);
+                    Console.Write("*");
+                }
             }
 
-            return new string(passwordChars.ToArray());
+            return new string(buffer.ToArray());
         }
 
         public string[] CreateUser()
@@ -117,84 +225,84 @@ namespace Aera
             string username;
             do
             {
-                WriteColored("Enter username: ", "Yellow");
+                WriteColored("Enter username: ", Theme.Prompt);
                 username = ReadLine();
             } while (string.IsNullOrWhiteSpace(username));
 
             string password;
-            do
-            {
-                password = GetPassword();
-            } while (string.IsNullOrWhiteSpace(password));
+            do password = GetPassword();
+            while (string.IsNullOrWhiteSpace(password));
 
             _userCredentials[0] = username;
             _userCredentials[1] = password;
 
             File.WriteAllLines("user.ss", _userCredentials);
 
-            WriteLineColored($"User {username} created.", "Green");
+            WriteLineColored($"User {username} created.", Theme.Success);
             Thread.Sleep(1200);
             Console.Clear();
 
             return _userCredentials;
         }
 
-        public void LoadUserCredentials(string[] inf)
-        {
-            _userCredentials = inf;
-        }
+        public void LoadUserCredentials(string[] credentials)
+            => _userCredentials = credentials;
 
         public void Login()
         {
-            if (File.Exists(Program.User) && File.ReadAllLines(Program.User).Any(line => !string.IsNullOrWhiteSpace(line)))
+            if (!File.Exists(Program.User) ||
+                File.ReadAllLines(Program.User).All(string.IsNullOrWhiteSpace))
             {
-                while (true)
+                CreateUser();
+                return;
+            }
+
+            while (true)
+            {
+                if (_userCredentials.Length < 2)
                 {
-                    // Check if credentials are actually loaded
-                    if (_userCredentials == null || _userCredentials.Length < 2)
-                    {
-                        WriteLineColored("User credentials not loaded properly.", "Red");
-                        return;
-                    }
+                    WriteLineColored("User credentials not loaded properly.", Theme.Error);
+                    return;
+                }
 
-                    var pass = GetPassword();
+                var pass = GetPassword();
 
-                    if (pass == _userCredentials[1])
-                    {
-                        WriteLineColored("Login success", "Green");
-                        Thread.Sleep(1000);
-                        Console.Clear();
-                        return;
-                    }
-
-                    WriteLineColored("Invalid password", "Red");
+                if (pass == _userCredentials[1])
+                {
+                    WriteLineColored("Login success", Theme.Success);
                     Thread.Sleep(1000);
                     Console.Clear();
+                    return;
                 }
-            }
-            else
-            {
-                // File doesn't exist or is empty - create new user
-                CreateUser();
+
+                WriteLineColored("Invalid password", Theme.Error);
+                Thread.Sleep(1000);
+                Console.Clear();
             }
         }
 
-        /* ================= USER INFO ================= */
+        /* =========================================================
+           USER INFO
+        ========================================================= */
 
         public void ShowUser(bool sudo)
         {
-            WriteLineColored("User Information:", "DarkCyan");
-            WriteLineColored($" - Username: {_userCredentials[0]}", "DarkCyan");
+            WriteLineColored("User Information:", Theme.Info);
+            WriteLineColored($" - Username: {_userCredentials[0]}", Theme.Info);
 
-            WriteLineColored(
-                !sudo
-                    ? $" - Password: {"".PadLeft(_userCredentials[1].Length, '*')}"
-                    : $" - Password: {_userCredentials[1]}", "DarkCyan");
+            string pass = sudo
+                ? _userCredentials[1]
+                : new string('*', _userCredentials[1].Length);
+
+            WriteLineColored($" - Password: {pass}", Theme.Info);
         }
 
-        public string GetUsername() => _userCredentials[0];
+        public string GetUsername()
+            => _userCredentials[0];
 
-        /* ================= SUDO ================= */
+        /* =========================================================
+           SUDO
+        ========================================================= */
 
         public bool AuthenticateSudo()
         {
@@ -202,63 +310,61 @@ namespace Aera
 
             if (attempt != _userCredentials[1])
             {
-                WriteLineColored("No sudo: authentication failed.", "Red");
+                WriteLineColored("No sudo: authentication failed.", Theme.Error);
                 return false;
             }
 
-            WriteLineColored("Access granted.", "Green");
+            WriteLineColored("Access granted.", Theme.Success);
             return true;
         }
+
         public bool Confirm(string message, bool defaultYes = false)
         {
-            var suffix = defaultYes ? "(Y/n)" : "(y/N)";
-            WriteColored("! ", "yellow");
+            WriteColored("! ", Theme.Prompt);
+
+            string suffix = defaultYes ? "(Y/n)" : "(y/N)";
             Write($"{message} {suffix} ");
 
-            var input = ReadLine()?.Trim().ToLowerInvariant();
+            var input = ReadLine().Trim().ToLowerInvariant();
 
             if (string.IsNullOrEmpty(input))
                 return defaultYes;
 
-            return input == "y" || input == "yes";
+            return input is "y" or "yes";
         }
+
+        /* =========================================================
+           UI RENDERING
+        ========================================================= */
 
         public string RenderRoundedBox(string[] lines)
         {
             if (lines.Length == 0)
                 return string.Empty;
 
-            int longest = lines.Max(l => l?.Length ?? 0);
-            int contentWidth = longest + 5;
+            int longest = lines.Max(l => VisibleLength(l ?? ""));
+            int width = longest + 5;
 
-            const string topLeft = "╭";
-            const string topRight = "╮";
-            const string bottomLeft = "╰";
-            const string bottomRight = "╯";
-            const string horizontal = "─";
-            const string vertical = "│";
+            const string TL = "╭";
+            const string TR = "╮";
+            const string BL = "╰";
+            const string BR = "╯";
+            const string H = "─";
+            const string V = "│";
 
-            // ANSI Colors
-            const string green = "\u001b[32m";
-            const string white = "\u001b[37m";
-            const string reset = "\u001b[0m";
+            const string border = "\x1b[38;2;0;210;190m";
 
             var sb = new StringBuilder();
 
-            // Top border
-            sb.AppendLine($"{green}{topLeft}{new string(horizontal[0], contentWidth + 2)}{topRight}{reset}");
+            sb.AppendLine($"{border}{TL}{new string(H[0], width + 2)}{TR}{Reset}");
 
-            // Content lines
             foreach (var line in lines)
             {
-                var safeLine = line ?? string.Empty;
-                var padded = safeLine.PadRight(contentWidth, ' ');
-
-                sb.AppendLine($"{green}{vertical}{reset} {white}{padded}{reset} {green}{vertical}{reset}");
+                var padded = PadRightAnsi(line ?? "", width);
+                sb.AppendLine($"{border}{V}{Reset} {padded} {border}{V}{Reset}");
             }
 
-            // Bottom border
-            sb.Append($"{green}{bottomLeft}{new string(horizontal[0], contentWidth + 2)}{bottomRight}{reset}");
+            sb.Append($"{border}{BL}{new string(H[0], width + 2)}{BR}{Reset}");
 
             return sb.ToString();
         }

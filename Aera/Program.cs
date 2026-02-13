@@ -7,8 +7,7 @@ namespace Aera
         public static string User = "";
         public static string Py = "";
 
-        public static string Ascii =
-            "    _      _____   ____       _    \n   / \\    | ____| |  _ \\     / \\   \n  / _ \\   |  _|   | |_) |   / _ \\  \n / ___ \\  | |___  |  _ <   / ___ \\ \n/_/   \\_\\ |_____| |_| \\_\\ /_/   \\_\\";
+        private const string Ascii = "    _      _____   ____       _    \n   / \\    | ____| |  _ \\     / \\   \n  / _ \\   |  _|   | |_) |   / _ \\  \n / ___ \\  | |___  |  _ <   / ___ \\ \n/_/   \\_\\ |_____| |_| \\_\\ /_/   \\_\\";
 
         static void Main(string[] args)
         {
@@ -154,7 +153,7 @@ namespace Aera
 
             while (true)
             {
-                tool.WriteColored($"{username}> ", "Cyan");
+                tool.WriteColored($"{username}> ", "metablue");
 
                 var input = tool.ReadLine();
 

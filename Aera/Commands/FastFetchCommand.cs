@@ -45,6 +45,12 @@ namespace Aera.Commands
                     $"RAM Total: {FormatBytes(totalRam)}",
                     $".NET Version: {Environment.Version}"
                 };
+                
+                fetch = tool.ApplyVerticalGradient(
+                    fetch,
+                    (0, 40, 110),        // Dark blue
+                    (255, 255, 255)      // White
+                );
 
                 tool.WriteLineColored(tool.RenderRoundedBox(fetch), "Green");
             }
