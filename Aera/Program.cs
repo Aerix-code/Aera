@@ -40,16 +40,16 @@ namespace Aera
             manager.Register(new ClearCommand());
             manager.Register(new ManCommand());
 
-            // ───────────── Identity / Privilege ─────────────
+            // ───────────── Identity / Privilege ────────────────
             manager.Register(new WhoAmICommand());
             manager.Register(new UserInfoCommand());
             manager.Register(new SudoCommand(manager));
 
-            // ───────────── Filesystem: Navigation ─────────────
+            // ───────────── Filesystem: Navigation ──────────────
             manager.Register(new PwdCommand());
             manager.Register(new CdCommand());
 
-            // ───────────── Filesystem: Inspection ─────────────
+            // ───────────── Filesystem: Inspection ───────────────
             manager.Register(new LsCommand());
             manager.Register(new TreeCommand());
             manager.Register(new CatCommand());
@@ -61,7 +61,7 @@ namespace Aera
             manager.Register(new TailCommand());
             manager.Register(new DuCommand());
 
-            // ───────────── Filesystem: Mutation ─────────────
+            // ───────────── Filesystem: Mutation ─────────────────
             manager.Register(new TouchCommand());
             manager.Register(new MkdirCommand());
             manager.Register(new RmCommand());
@@ -69,11 +69,11 @@ namespace Aera
             manager.Register(new MvCommand());
             manager.Register(new NanoCommand());
 
-            // ───────────────────── Text Processing ─────────────────────
+            // ──────────────── Text Processing ────────────────────
             manager.Register(new SortCommand());
             manager.Register(new UniqCommand());
 
-            // ───────────────────── Environment ─────────────────────
+            // ──────────────────── Environment ────────────────────
             manager.Register(new EnvCommand());
             manager.Register(new WhichCommand());
 
@@ -81,6 +81,9 @@ namespace Aera
             manager.Register(new DateCommand());
             manager.Register(new TimeCommand());
             manager.Register(new FastFetchCommand());
+            
+            // ───────────────────── Networking ─────────────────────
+            manager.Register(new PingCommand());
 
             // ───────────── Output / Piping Helpers ─────────────
             manager.Register(new WriteCommand());

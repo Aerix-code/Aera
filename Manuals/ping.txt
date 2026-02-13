@@ -1,0 +1,25 @@
+PING - Test network connectivity
+
+SYNOPSIS:
+    ping <host> [-c <count>] [-t] [-w <timeout_ms>]
+
+DESCRIPTION:
+    Sends ICMP echo requests to a host to test network connectivity.
+
+OPTIONS:
+    -c <count>      Number of ping packets to send (default: 4)
+    -t              Continuous ping until stopped with Ctrl+C
+    -w <timeout_ms> Timeout per ping in milliseconds (default: 1000)
+
+EXAMPLES:
+    ping google.com
+        Sends 4 pings to google.com
+
+    ping 8.8.8.8 -c 10
+        Sends 10 pings to 8.8.8.8
+
+    ping example.com -t
+        Continuously pings example.com until Ctrl+C is pressed
+
+    ping example.com -c 5 -w 2000
+        Sends 5 pings with a timeout of 2000ms each
