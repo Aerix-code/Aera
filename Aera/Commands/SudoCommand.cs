@@ -18,14 +18,16 @@
                 return;
             }
 
+            // Authenticate (validation only)
             if (!tool.AuthenticateSudo())
                 return;
 
             var previousSudo = tool.IsSudo;
-            tool.IsSudo = true;
 
             try
             {
+                tool.IsSudo = true;
+
                 var commandName = args[0];
                 string[] commandArgs = args.Skip(1).ToArray();
 
@@ -33,6 +35,7 @@
             }
             finally
             {
+                // Always restore previous privilege state
                 tool.IsSudo = previousSudo;
             }
         }

@@ -154,7 +154,6 @@ namespace Aera
             }
 
             WriteLineColored("Access granted.", "Green");
-            IsSudo = true;
             return true;
         }
         public bool Confirm(string message, bool defaultYes = false)

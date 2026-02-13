@@ -18,7 +18,7 @@
                 return;
             }
 
-            tool.ShowUser(false);
+            tool.ShowUser(tool.IsSudo);
         }
 
         public void ExecutePipe(string input, string[] args, ShellContext tool)
