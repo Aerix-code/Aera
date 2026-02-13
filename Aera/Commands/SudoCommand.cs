@@ -17,8 +17,7 @@
                 tool.WriteLine("Usage: sudo <command>");
                 return;
             }
-
-            // Authenticate (validation only)
+            // validate sudo
             if (!tool.AuthenticateSudo())
                 return;
 
@@ -35,7 +34,6 @@
             }
             finally
             {
-                // Always restore previous privilege state
                 tool.IsSudo = previousSudo;
             }
         }
