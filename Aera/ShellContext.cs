@@ -124,7 +124,6 @@ namespace Aera
             string password;
             do
             {
-                WriteColored("Enter password: ", "Yellow");
                 password = GetPassword();
             } while (string.IsNullOrWhiteSpace(password));
 
