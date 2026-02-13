@@ -93,18 +93,31 @@ namespace Aera
             Thread.Sleep(1500);
 
             manager.Execute("clear", tool);
-            if (File.Exists(Program.User) && File.ReadAllLines(Program.User).All(line => !string.IsNullOrWhiteSpace(line)))
-            {
-                userCredentials = File.ReadAllLines("user.ss");
-                tool.LoadUserCredentials(userCredentials);
 
-                if (!skipLogin)
+            if (File.Exists(Program.User))
+            {
+                string[] lines = File.ReadAllLines(Program.User);
+    
+                // Check if file has valid content (at least 2 non-empty lines)
+                if (lines.Length >= 2 && lines.All(line => !string.IsNullOrWhiteSpace(line)))
                 {
-                    tool.Login();
+                    userCredentials = lines;
+                    tool.LoadUserCredentials(userCredentials);
+
+                    if (!skipLogin)
+                    {
+                        tool.Login();
+                    }
+                }
+                else
+                {
+                    // File exists but is empty or invalid - create new user
+                    userCredentials = tool.CreateUser();
                 }
             }
             else
             {
+                // File doesn't exist - create new user
                 userCredentials = tool.CreateUser();
             }
 

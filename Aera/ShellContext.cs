@@ -146,21 +146,36 @@ namespace Aera
 
         public void Login()
         {
-            while (true)
+            if (File.Exists(Program.User) && File.ReadAllLines(Program.User).Any(line => !string.IsNullOrWhiteSpace(line)))
             {
-                var pass = GetPassword();
-
-                if (pass == _userCredentials[1])
+                while (true)
                 {
-                    WriteLineColored("Login success", "Green");
+                    // Check if credentials are actually loaded
+                    if (_userCredentials == null || _userCredentials.Length < 2)
+                    {
+                        WriteLineColored("User credentials not loaded properly.", "Red");
+                        return;
+                    }
+
+                    var pass = GetPassword();
+
+                    if (pass == _userCredentials[1])
+                    {
+                        WriteLineColored("Login success", "Green");
+                        Thread.Sleep(1000);
+                        Console.Clear();
+                        return;
+                    }
+
+                    WriteLineColored("Invalid password", "Red");
                     Thread.Sleep(1000);
                     Console.Clear();
-                    return;
                 }
-
-                WriteLineColored("Invalid password", "Red");
-                Thread.Sleep(1000);
-                Console.Clear();
+            }
+            else
+            {
+                // File doesn't exist or is empty - create new user
+                CreateUser();
             }
         }
 
