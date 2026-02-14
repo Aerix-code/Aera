@@ -181,15 +181,6 @@ internal class MyCommand : ICommand
 
 Register it inside Program
 
-Project Structure
-Aera/
- ├── Program.cs
- ├── CommandManager.cs
- ├── ShellContext.cs
- ├── ICommand.cs
- ├── *Command.cs
- └── Aera.csproj
-
 Goals
 
 Provide a learning environment for shell design
