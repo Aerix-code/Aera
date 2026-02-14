@@ -212,7 +212,6 @@ namespace Aera
                 if (!char.IsControl(key.KeyChar))
                 {
                     buffer.Add(key.KeyChar);
-                    Console.Write("*");
                 }
             }
 
